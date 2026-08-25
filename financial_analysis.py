@@ -1,8 +1,9 @@
-
+#These are like getting all the ingredients from the store before cooking. 
+#This just gets data from Yahoo Finance
 import yfinance as yf 
-
+#This is what give us these pretty tables we see and makes history["Close"] and .mean() work
 import pandas as pd
-
+#We didn't call this directly but it does numerical computing
 import numpy as np
 
 pd.set_option('display.max_columns', None)
