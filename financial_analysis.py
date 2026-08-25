@@ -1,6 +1,10 @@
 
 import yfinance as yf 
 
+import pandas as pd
+
+pd.set_option('display.max_columns', None)
+
 #Task 1: Looping and string formatting 
 #This first area just lists the 5 made up prices and then prints them in the right format with 2 decimal places.
 
