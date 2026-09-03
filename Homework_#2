@@ -13,7 +13,7 @@ import numpy as np
 
 
 # So Taiwan is what I am declaring as a variable to represent the TSM ticket. 
-# The TSM_Data variable is getting TSM's historical data for the last year.
+# The TSM_Data variable is getting TSM's historical data for the last 2 years.
 # We fetched two years of data to ensure we have enough data for our analysis.
 Taiwan = yf.Ticker("TSM")
 TSM_data = Taiwan.history(period="2y")
@@ -21,18 +21,21 @@ TSM_data = Taiwan.history(period="2y")
 #only put out those columns we want to see. I don't want dividends or splits. 
 TSM_data = TSM_data[['Open', 'High', 'Low', 'Close', 'Volume']]
 
-# Here I am defining september as a variable to represent the data for September 2025. 
+# September 2025 is being defined as a variable to represent the data for September 2025. It is Avergage close 25 that is the full year. 
 # Next I am defining average_close_2025 as a variable to represent the average closing price for 2025. 
 # The .loc function is used to select rows and columns by lable (the actual names/dates - NOT the position in numbers)
-# The print statement is then used to display the average closing price for September 2025, formatted to two decimal places.
+# The print statement is then used to display the average closing price for 2025, formatted to two decimal places.
 # the .2f in the print statement is used to format the average closing price to two decimal places.
 # the $ sign is used to indicate that the value is in dollars.
-# The f in the print statement prints litteraly average: ${average_close_2025:.2f} and then replaces the variable 
-# average_close_2025 with the actual value of the average closing price for September 2025.
+# The f in the print statement it doesn't litterally print: ${average_close_2025:.2f} it instead will print the actual value. 
+# average_close_2025 with the actual value of the average closing price for 2025.
 september = TSM_data.loc["2025-09"]
 average_close_2025 = TSM_data.loc["2025", "Close"].mean()
 print(f"Average Closing Price for 2025: ${average_close_2025:.2f}")
 
+#This strips the time and the timexone off the dates so they print more clearly as just plan days. Now I found a mistake the 
+#first time I ran the code. I had the line before the .loc selections and it was messing up
+#It has to come after the .loc selections beacuse converting the index breaks the .loc's acbility to look up months
 TSM_data.index = TSM_data.index.date
 
 
@@ -50,6 +53,7 @@ print("\nClose and Volume:")
 print(TSM_data[["Close","Volume"]])
 
 #Then so we don't print the entire DataFrame, I am just printing the data for September 2025.
+#I put the september.index aher so that it does the same strip as before but with september's index.
 september.index = september.index.date
 print("\nSeptember 2025:")
 print(september)
@@ -78,13 +82,22 @@ print(f"\nHighest Volume day: {highest_volume_day}, Volume: {highest_volume:,}")
 row_position = TSM_data.index.get_loc(highest_volume_day)
 
 #Here we define the next_day_return variable to get the daily return for the day after the highest volume day.
-#iloc formats the row position. It does this by row number counting from 0. 
+#iloc selects the row position. It does this by row number counting from 0. 
 #The print statement will print the text Next Day Return and then pop in the value for that as a % with 2x decimal places.
 
 next_day_return = TSM_data['Daily Returns'].iloc[row_position + 1]
 print(f"\nNext Day Return: {next_day_return:.2%}")
 
-
+# Row_position is the row number of Jan 27th, 25. This grabs the closing price on that day and stores it. 
+# Jan 27th had the highest volume as this was the DeepSeek sell off. The panic largerly bounced back as it was up 
+# 3.89% the next week. 
+# This sell off was when R1 was released and the market was spooked by the news. The market was worried about the 
+# impact of R1 on the economy and the potential for decreaseing AI capex and chip demand. R1 was so cheap to make in comparision to other options
+# Regardless Capex kept climbing and the semis recovered. 
+#The close 5 days later is the same coloumn but five rows down. Since each row is a day this is the closes we can 
+#get to 5 days later. 
+#Five day return this is the percent change formula: New minus old divided by old. 
+#The last one multiplies by 100 and then adds the % sign to make it a % and prints with 2 decimal places.
 close_on_day = TSM_data['Close'].iloc[row_position]
 close_5_days_later = TSM_data['Close'].iloc[row_position + 5]
 five_day_return = (close_5_days_later - close_on_day) / close_on_day
