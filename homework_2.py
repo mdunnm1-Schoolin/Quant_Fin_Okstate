@@ -5,7 +5,7 @@ Tasks 1-5:
 # This is a library that allows us to fetch financial data from Yahoo Finance.
 import yfinance as yf
 
-# This privides us the ability to work with dataframes and arrays.
+# This gives us the ability to work with dataframes and arrays.
 import pandas as pd
 
 # This library provides us with numerical operations and functions for working with arrays.
@@ -21,21 +21,21 @@ TSM_data = Taiwan.history(period="2y")
 #only put out those columns we want to see. I don't want dividends or splits. 
 TSM_data = TSM_data[['Open', 'High', 'Low', 'Close', 'Volume']]
 
-# September 2025 is being defined as a variable to represent the data for September 2025. It is Avergage close 25 that is the full year. 
+# September 2025 is being defined as a variable to represent the data for September 2025. It is Average close 25 that is the full year. 
 # Next I am defining average_close_2025 as a variable to represent the average closing price for 2025. 
-# The .loc function is used to select rows and columns by lable (the actual names/dates - NOT the position in numbers)
+# The .loc function is used to select rows and columns by label (the actual names/dates - NOT the position in numbers)
 # The print statement is then used to display the average closing price for 2025, formatted to two decimal places.
 # the .2f in the print statement is used to format the average closing price to two decimal places.
 # the $ sign is used to indicate that the value is in dollars.
-# The f in the print statement it doesn't litterally print: ${average_close_2025:.2f} it instead will print the actual value. 
+# The f in the print statement it doesn't literally print: ${average_close_2025:.2f} it instead will print the actual value. 
 # average_close_2025 with the actual value of the average closing price for 2025.
 september = TSM_data.loc["2025-09"]
 average_close_2025 = TSM_data.loc["2025", "Close"].mean()
 print(f"Average Closing Price for 2025: ${average_close_2025:.2f}")
 
-#This strips the time and the timexone off the dates so they print more clearly as just plan days. Now I found a mistake the 
+#This strips the time and the timezone off the dates so they print more clearly as just plain days. Now I found a mistake the 
 #first time I ran the code. I had the line before the .loc selections and it was messing up
-#It has to come after the .loc selections beacuse converting the index breaks the .loc's acbility to look up months
+#It has to come after the .loc selections beacuse converting the index breaks the .loc's ability to look up months
 TSM_data.index = TSM_data.index.date
 
 
@@ -68,7 +68,7 @@ print(f"\nAverage Daily Return: {average_daily_return:.2%}")
 
 
 #idxmax() is a function that returns the index of the maximum value in a Series.
-#max on the next line gives us the value of the maxium value in a Series.
+#max on the next line gives us the value of the maximum value in a Series.
 #the :, gives us a readable format for the volume number.
 #The print statement is used to first state the index of the maximum value 
 #this is with the variable of highest_volume_day. 
@@ -78,7 +78,7 @@ highest_volume = TSM_data['Volume'].max()
 print(f"\nHighest Volume day: {highest_volume_day}, Volume: {highest_volume:,}")
 
 #So here we are getting the row position of the highest volume day in the TSM_data DataFrame.
-#get_loc() will find the row number for the higheset volume day (this is the varible that was defined above).
+#get_loc() will find the row number for the highest volume day (this is the varible that was defined above).
 row_position = TSM_data.index.get_loc(highest_volume_day)
 
 #Here we define the next_day_return variable to get the daily return for the day after the highest volume day.
@@ -89,12 +89,12 @@ next_day_return = TSM_data['Daily Returns'].iloc[row_position + 1]
 print(f"\nNext Day Return: {next_day_return:.2%}")
 
 # Row_position is the row number of Jan 27th, 25. This grabs the closing price on that day and stores it. 
-# Jan 27th had the highest volume as this was the DeepSeek sell off. The panic largerly bounced back as it was up 
+# Jan 27th had the highest volume as this was the DeepSeek sell off. The panic largely bounced back as it was up 
 # 3.89% the next week. 
 # This sell off was when R1 was released and the market was spooked by the news. The market was worried about the 
-# impact of R1 on the economy and the potential for decreaseing AI capex and chip demand. R1 was so cheap to make in comparision to other options
+# impact of R1 on the economy and the potential for decreaseing AI capex and chip demand. R1 was so cheap to make in comparison to other options
 # Regardless Capex kept climbing and the semis recovered. 
-#The close 5 days later is the same coloumn but five rows down. Since each row is a day this is the closes we can 
+#The close 5 days later is the same column but five rows down. Since each row is a day this is the closes we can 
 #get to 5 days later. 
 #Five day return this is the percent change formula: New minus old divided by old. 
 #The last one multiplies by 100 and then adds the % sign to make it a % and prints with 2 decimal places.
