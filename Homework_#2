@@ -1,0 +1,35 @@
+"""
+Homework 2: Data Analysis with Pandas and yfinance
+Tasks 1-5: 
+"""
+
+import yfinance as yf
+
+import pandas as pd
+
+import numpy as np
+
+
+Taiwan = yf.Ticker("TSM")
+TSM_data = Taiwan.history(period="1y")
+
+#only put out those columns we want to see. I don't want dividends or splits. 
+TSM_data = TSM_data[['Open', 'High', 'Low', 'Close', 'Volume']]
+
+sepetember = TSM_data.loc["2025-09"]
+TSM_data.index = TSM_data.index.date
+
+print("First 10 Trading Days:")
+print (TSM_data.head(10))  
+print("\nLast 10 Trading Days:")
+print (TSM_data.tail(10))
+
+
+
+print(TSM_data[["Close","Volume"]])
+
+print(TSM_data.loc["2025-09"])
+
+TSM_data['Daily Return'] = TSM_data['Close'].pct_change()
+
+

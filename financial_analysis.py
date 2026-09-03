@@ -1,5 +1,5 @@
 """
-Homework 1: Financial Data Analysis
+Homework 1: Financial Data Analysis 
 Tasks 1-4: Loops, String Formatting, and stock data from Yahoo Finance
 """
  
