@@ -2,11 +2,13 @@
 Homework 2: Data Analysis with Pandas and yfinance
 Tasks 1-5: 
 """
-
+# This is a library that allows us to fetch financial data from Yahoo Finance.
 import yfinance as yf
 
+# This privides us the ability to work with dataframes and arrays.
 import pandas as pd
 
+# This library provides us with numerical operations and functions for working with arrays.
 import numpy as np
 
 
@@ -19,9 +21,20 @@ TSM_data = Taiwan.history(period="2y")
 #only put out those columns we want to see. I don't want dividends or splits. 
 TSM_data = TSM_data[['Open', 'High', 'Low', 'Close', 'Volume']]
 
+# Here I am defining september as a variable to represent the data for September 2025. 
+# Next I am defining average_close_2025 as a variable to represent the average closing price for September 2025. 
+# The .loc function is used to select rows and columns by lable (the actual names/dates - NOT the position in numbers)
+# The print statement is then used to display the average closing price for September 2025, formatted to two decimal places.
+# the .2f in the print statement is used to format the average closing price to two decimal places.
+# the $ sign is used to indicate that the value is in dollars.
+# The f in the print statement prints litteraly average: ${average_close_2025:.2f} and then replaces the variable 
+# average_close_2025 with the actual value of the average closing price for September 2025.
 september = TSM_data.loc["2025-09"]
 average_close_2025 = TSM_data.loc["2025-09", "Close"].mean()
 print(f"Average Closing Price for September 2025: ${average_close_2025:.2f}")
+
+TSM_data.index = TSM_data.index.date
+
 
 #Right here we are printing the title "First 10 Trading Days" and then printing the first 10 rows of the TSM_data DataFrame.
 # Below that we are using \n to create a new line and then printing the title "Last 10 Trading Days"
@@ -31,7 +44,6 @@ print (TSM_data.head(10))
 print("\nLast 10 Trading Days:")
 print (TSM_data.tail(10))
 
-
 #Here I am printing the Close and Volume columns of the TSM_data DataFrame.
 print(TSM_data[["Close","Volume"]])
 
@@ -40,10 +52,10 @@ print(september)
 
 #Here we are geting the TSM Data and titling it daily return. Then We title the TSM Data for close. 
 #After that we are using the pct_change() function to get the daily return of TSM.
+#The last line here is getting the average daily return of TSM and titling it average daily return.
 TSM_data['Daily Return'] = TSM_data['Close'].pct_change()
 TSM_data['Average Daily Return'] = TSM_data['Daily Return'].mean()
 
-TSM_data.index = TSM_data.index.date
 
 #idxmax() is a function that returns the index of the maximum value in a Series.
 #max on the next line gives us the value here
