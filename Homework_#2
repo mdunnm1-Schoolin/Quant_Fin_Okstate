@@ -10,26 +10,56 @@ import pandas as pd
 import numpy as np
 
 
+# So Taiwan is what I am declaring as a variable to represent the TSM ticket. 
+# The TSM_Data variable is getting TSM's historical data for the last year.
+# We fetched two years of data to ensure we have enough data for our analysis.
 Taiwan = yf.Ticker("TSM")
-TSM_data = Taiwan.history(period="1y")
+TSM_data = Taiwan.history(period="2y")
 
 #only put out those columns we want to see. I don't want dividends or splits. 
 TSM_data = TSM_data[['Open', 'High', 'Low', 'Close', 'Volume']]
 
-sepetember = TSM_data.loc["2025-09"]
-TSM_data.index = TSM_data.index.date
+september = TSM_data.loc["2025-09"]
+average_close_2025 = TSM_data.loc["2025-09", "Close"].mean()
+print(f"Average Closing Price for September 2025: ${average_close_2025:.2f}")
 
+#Right here we are printing the title "First 10 Trading Days" and then printing the first 10 rows of the TSM_data DataFrame.
+# Below that we are using \n to create a new line and then printing the title "Last 10 Trading Days"
+# Lastly we are then printing the last 10 rows of the TSM_data DataFrame.
 print("First 10 Trading Days:")
 print (TSM_data.head(10))  
 print("\nLast 10 Trading Days:")
 print (TSM_data.tail(10))
 
 
-
+#Here I am printing the Close and Volume columns of the TSM_data DataFrame.
 print(TSM_data[["Close","Volume"]])
 
-print(TSM_data.loc["2025-09"])
+#Then so we don't print the entire DataFrame, I am just printing the data for September 2025.
+print(september)
 
+#Here we are geting the TSM Data and titling it daily return. Then We title the TSM Data for close. 
+#After that we are using the pct_change() function to get the daily return of TSM.
 TSM_data['Daily Return'] = TSM_data['Close'].pct_change()
+TSM_data['Average Daily Return'] = TSM_data['Daily Return'].mean()
 
+TSM_data.index = TSM_data.index.date
 
+#idxmax() is a function that returns the index of the maximum value in a Series.
+#max on the next line gives us the value here
+#the :, gives us a readable format for the volume number.
+highest_volume_day = TSM_data['Volume'].idxmax()
+highest_volume = TSM_data['Volume'].max()
+print(f"Highest Volume day: {highest_volume_day}, Volume: {highest_volume:,}")
+
+#So here we are getting the row position of the highest volume day in the TSM_data DataFrame.
+#get_loc() will find the row number for the higheset volume day
+row_position = TSM_data.index.get_loc(highest_volume_day)
+
+next_day_return = TSM_data['Daily Return'].iloc[row_position + 1]
+print(f"Next Day Return: {next_day_return:.2%}")
+
+close_on_day = TSM_data['Close'].iloc[row_position]
+close_5_days_later = TSM_data['Close'].iloc[row_position + 5]
+five_day_return = (close_5_days_later - close_on_day) / close_on_day
+print(f"5-Day Return: {five_day_return:.2%}")
